@@ -16,7 +16,7 @@ const Home = () => {
     <HomeWrapper>
       <Hero>
         <h1>Welcome to Kiwiverse</h1>
-        <p>Your one-stop shop for everything kiwi</p>
+        <p>Your one-stop shop for everything</p>
       </Hero>
       <FeaturedSection>
         <h2>Featured Products</h2>

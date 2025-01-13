@@ -6,7 +6,7 @@ const Footer = () => {
       <FooterContent>
         <div>
           <h3>Kiwiverse</h3>
-          <p>Your one-stop shop for everything kiwi</p>
+          <p>Your one-stop shop for everything</p>
         </div>
         <FooterLinks>
           <div>

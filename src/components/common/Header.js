@@ -3,13 +3,17 @@ import styled from 'styled-components';
 import { useCart } from '../../context/CartContext';
 
 const Header = () => {
+  const { cartCount } = useCart();
+
   return (
     <HeaderWrapper>
       <Logo to="/">Kiwiverse</Logo>
       <Nav>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">Products</NavLink>
-        <NavLink to="/cart">Cart</NavLink>
+        <CartLink to="/cart">
+          Cart {cartCount > 0 && <CartBadge>{cartCount}</CartBadge>}
+        </CartLink>
       </Nav>
     </HeaderWrapper>
   );
@@ -42,6 +46,21 @@ const NavLink = styled(Link)`
   &:hover {
     color: #4CAF50;
   }
+`;
+
+const CartLink = styled(NavLink)`
+  position: relative;
+`;
+
+const CartBadge = styled.span`
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
 `;
 
 export default Header;

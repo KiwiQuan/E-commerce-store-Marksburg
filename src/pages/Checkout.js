@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
   const { cartItems } = useCart();
-  const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   return (
     <CheckoutWrapper>
@@ -33,8 +33,8 @@ const Checkout = () => {
           <h2>Order Summary</h2>
           {cartItems.map(item => (
             <OrderItem key={item.id}>
-              <span>{item.name}</span>
-              <span>${item.price}</span>
+              <span>{item.name} (x{item.quantity})</span>
+              <span>${(item.price * item.quantity).toFixed(2)}</span>
             </OrderItem>
           ))}
           <Total>
