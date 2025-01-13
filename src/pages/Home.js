@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import ProductCard from '../components/common/ProductCard';
-import { products } from '../data/products';
+import { useProducts } from '../data/products';
 
 const Home = () => {
+  const { products, loading } = useProducts();
+
+  if (loading) {
+    return <LoadingWrapper>Loading featured products...</LoadingWrapper>;
+  }
+
   // Get first 4 products as featured
   const featuredProducts = products.slice(0, 4);
 
@@ -27,6 +33,13 @@ const Home = () => {
 const HomeWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
+`;
+
+const LoadingWrapper = styled.div`
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
 `;
 
 const Hero = styled.section`
@@ -56,9 +69,10 @@ const FeaturedSection = styled.section`
 `;
 
 const ProductGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
 `;
 
 export default Home;

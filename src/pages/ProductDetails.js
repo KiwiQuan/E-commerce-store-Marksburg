@@ -1,19 +1,28 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { products } from '../data/products';
+import { useProducts } from '../data/products';
 import { useCart } from '../context/CartContext';
+import { useNotification } from '../context/NotificationContext';
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const { products, loading } = useProducts();
   const { addToCart } = useCart();
+  const { showNotification } = useNotification();
+  
+  if (loading) {
+    return <LoadingWrapper>Loading product details...</LoadingWrapper>;
+  }
+
   const product = products.find(p => p.id === parseInt(id));
 
   if (!product) {
-    return <div>Product not found</div>;
+    return <ErrorWrapper>Product not found</ErrorWrapper>;
   }
 
   const handleAddToCart = () => {
     addToCart(product);
+    showNotification(`${product.name} added to cart!`);
   };
 
   return (
@@ -42,11 +51,24 @@ const Wrapper = styled.div`
   gap: 2rem;
 `;
 
+const LoadingWrapper = styled.div`
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+`;
+
+const ErrorWrapper = styled(LoadingWrapper)`
+  color: #ff4444;
+`;
+
 const ImageSection = styled.div`
   img {
     width: 100%;
     height: auto;
     border-radius: 8px;
+    max-height: 500px;
+    object-fit: contain;
   }
 `;
 
