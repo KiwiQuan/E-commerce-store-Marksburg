@@ -14,7 +14,7 @@
 - [x] Save cart to localStorage (persist after refresh)
 - [x] Cart item count badge in header
 - [ ] "Continue shopping" links
-- [ ] Mini cart preview dropdown
+- [x] Mini cart preview dropdown
 
 ## User Features
 - [ ] User authentication (login/register)
