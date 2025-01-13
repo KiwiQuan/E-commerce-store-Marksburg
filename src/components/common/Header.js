@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useCart } from '../../context/CartContext';
+import { useState } from 'react';
+import MiniCart from './MiniCart';
 
 const Header = () => {
   const { cartCount } = useCart();
+  const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
 
   return (
     <HeaderWrapper>
@@ -11,9 +14,22 @@ const Header = () => {
       <Nav>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">Products</NavLink>
-        <CartLink to="/cart">
-          Cart {cartCount > 0 && <CartBadge>{cartCount}</CartBadge>}
-        </CartLink>
+        <CartContainer>
+          <CartLink 
+            to="#" 
+            onClick={(e) => {
+              e.preventDefault();
+              setIsMiniCartOpen(!isMiniCartOpen);
+            }}
+            onMouseEnter={() => setIsMiniCartOpen(true)}
+          >
+            Cart {cartCount > 0 && <CartBadge>{cartCount}</CartBadge>}
+          </CartLink>
+          <MiniCart 
+            isOpen={isMiniCartOpen} 
+            onClose={() => setIsMiniCartOpen(false)} 
+          />
+        </CartContainer>
       </Nav>
     </HeaderWrapper>
   );
@@ -61,6 +77,10 @@ const CartBadge = styled.span`
   border-radius: 50%;
   padding: 0.2rem 0.5rem;
   font-size: 0.8rem;
+`;
+
+const CartContainer = styled.div`
+  position: relative;
 `;
 
 export default Header;
