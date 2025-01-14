@@ -6,9 +6,13 @@ export const useProducts = () => {
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch');
+        }
+        return res.json();
+      })
       .then(data => {
-        // Transform the data to match your product structure
         const transformedData = data.map(item => ({
           id: item.id,
           name: item.title,
@@ -16,7 +20,13 @@ export const useProducts = () => {
           image: item.image,
           description: item.description
         }));
+        
         setProducts(transformedData);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+        setProducts([]);
         setLoading(false);
       });
   }, []);

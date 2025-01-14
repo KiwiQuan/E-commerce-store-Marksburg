@@ -1,21 +1,25 @@
 import styled from 'styled-components';
 import ProductCard from '../components/common/ProductCard';
+import ProductSkeleton from '../components/common/ProductSkeleton';
 import { useProducts } from '../data/products';
 
 const Products = () => {
   const { products, loading } = useProducts();
 
-  if (loading) {
-    return <LoadingWrapper>Loading products...</LoadingWrapper>;
-  }
-
   return (
     <ProductsWrapper>
       <h1>Our Products</h1>
       <ProductGrid>
-        {products.map(product => (
-          <ProductCard key={product.id} {...product} />
-        ))}
+        {loading ? (
+          // Show 8 skeleton cards while loading
+          [...Array(8)].map((_, index) => (
+            <ProductSkeleton key={index} />
+          ))
+        ) : (
+          products.map(product => (
+            <ProductCard key={product.id} {...product} />
+          ))
+        )}
       </ProductGrid>
     </ProductsWrapper>
   );

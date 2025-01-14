@@ -1,15 +1,10 @@
 import styled from 'styled-components';
 import ProductCard from '../components/common/ProductCard';
+import ProductSkeleton from '../components/common/ProductSkeleton';
 import { useProducts } from '../data/products';
 
 const Home = () => {
   const { products, loading } = useProducts();
-
-  if (loading) {
-    return <LoadingWrapper>Loading featured products...</LoadingWrapper>;
-  }
-
-  // Get first 4 products as featured
   const featuredProducts = products.slice(0, 4);
 
   return (
@@ -21,9 +16,16 @@ const Home = () => {
       <FeaturedSection>
         <h2>Featured Products</h2>
         <ProductGrid>
-          {featuredProducts.map(product => (
-            <ProductCard key={product.id} {...product} />
-          ))}
+          {loading ? (
+            // Show 4 skeleton cards while loading
+            [...Array(4)].map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))
+          ) : (
+            featuredProducts.map(product => (
+              <ProductCard key={product.id} {...product} />
+            ))
+          )}
         </ProductGrid>
       </FeaturedSection>
     </HomeWrapper>

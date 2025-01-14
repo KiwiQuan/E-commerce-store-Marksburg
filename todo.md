@@ -39,8 +39,8 @@
 - [ ] Guest checkout option
 
 ## UI/UX Enhancements
-- [ ] Mobile responsive menu
-- [ ] Loading skeletons
+- [x] Mobile responsive menu
+- [x] Loading skeletons
 - [ ] Better error handling
 - [ ] Smooth animations
 - [ ] Empty state designs
