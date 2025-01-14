@@ -14,7 +14,12 @@ const MiniCart = ({ isOpen, onClose }) => {
       </CartHeader>
       <CartItems>
         {cartItems.length === 0 ? (
-          <EmptyCart>Your cart is empty</EmptyCart>
+          <EmptyCart>
+            <p>Your cart is empty</p>
+            <ContinueShoppingLink to="/products" onClick={onClose}>
+              Start Shopping
+            </ContinueShoppingLink>
+          </EmptyCart>
         ) : (
           cartItems.map(item => (
             <CartItem key={item.id}>
@@ -30,20 +35,27 @@ const MiniCart = ({ isOpen, onClose }) => {
         )}
       </CartItems>
       {cartItems.length > 0 && (
-        <CartFooter>
-          <Total>
-            <span>Total:</span>
-            <span>${cartTotal.toFixed(2)}</span>
-          </Total>
-          <Actions>
-            <ViewCartButton to="/cart" onClick={onClose}>
-              View Cart
-            </ViewCartButton>
-            <CheckoutButton to="/checkout" onClick={onClose}>
-              Checkout
-            </CheckoutButton>
-          </Actions>
-        </CartFooter>
+        <>
+          <CartFooter>
+            <Total>
+              <span>Total:</span>
+              <span>${cartTotal.toFixed(2)}</span>
+            </Total>
+            <Actions>
+              <ViewCartButton to="/cart" onClick={onClose}>
+                View Cart
+              </ViewCartButton>
+              <CheckoutButton to="/checkout" onClick={onClose}>
+                Checkout
+              </CheckoutButton>
+            </Actions>
+          </CartFooter>
+          <ContinueShopping>
+            <ContinueShoppingLink to="/products" onClick={onClose}>
+              Continue Shopping
+            </ContinueShoppingLink>
+          </ContinueShopping>
+        </>
       )}
     </MiniCartWrapper>
   );
@@ -156,6 +168,22 @@ const CheckoutButton = styled(Button)`
   
   &:hover {
     background: #45a049;
+  }
+`;
+
+const ContinueShopping = styled.div`
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid #eee;
+`;
+
+const ContinueShoppingLink = styled(Link)`
+  color: #4CAF50;
+  text-decoration: none;
+  font-size: 0.9rem;
+  
+  &:hover {
+    text-decoration: underline;
   }
 `;
 

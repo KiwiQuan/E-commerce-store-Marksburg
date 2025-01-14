@@ -3,10 +3,18 @@ import styled from 'styled-components';
 import { useCart } from '../../context/CartContext';
 import { useState } from 'react';
 import MiniCart from './MiniCart';
+import { BsCart3 } from 'react-icons/bs';
 
 const Header = () => {
-  const { cartCount } = useCart();
+  const { cartItems, cartCount } = useCart();
   const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
+
+  const handleCartClick = (e) => {
+    if (cartItems.length === 0) {
+      e.preventDefault();
+    }
+    setIsMiniCartOpen(!isMiniCartOpen);
+  };
 
   return (
     <HeaderWrapper>
@@ -16,14 +24,13 @@ const Header = () => {
         <NavLink to="/products">Products</NavLink>
         <CartContainer>
           <CartLink 
-            to="#" 
-            onClick={(e) => {
-              e.preventDefault();
-              setIsMiniCartOpen(!isMiniCartOpen);
-            }}
+            to="/cart" 
+            onClick={handleCartClick}
             onMouseEnter={() => setIsMiniCartOpen(true)}
+            $isEmpty={cartItems.length === 0}
           >
-            Cart {cartCount > 0 && <CartBadge>{cartCount}</CartBadge>}
+            <BsCart3 size={24} />
+            {cartCount > 0 && <CartBadge>{cartCount}</CartBadge>}
           </CartLink>
           <MiniCart 
             isOpen={isMiniCartOpen} 
@@ -64,8 +71,17 @@ const NavLink = styled(Link)`
   }
 `;
 
-const CartLink = styled(NavLink)`
+const CartLink = styled(Link)`
   position: relative;
+  color: #333;
+  text-decoration: none;
+  cursor: ${props => props.$isEmpty ? 'default' : 'pointer'};
+  opacity: ${props => props.$isEmpty ? 0.6 : 1};
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${props => props.$isEmpty ? '#333' : '#4CAF50'};
+  }
 `;
 
 const CartBadge = styled.span`

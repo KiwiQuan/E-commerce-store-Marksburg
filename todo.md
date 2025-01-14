@@ -13,7 +13,7 @@
 - [x] Cart item quantity adjustment
 - [x] Save cart to localStorage (persist after refresh)
 - [x] Cart item count badge in header
-- [ ] "Continue shopping" links
+- [X] "Continue shopping" links
 - [x] Mini cart preview dropdown
 
 ## User Features

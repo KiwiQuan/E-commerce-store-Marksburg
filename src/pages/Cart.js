@@ -14,29 +14,43 @@ const Cart = () => {
       <CartContent>
         <CartItems>
           {cartItems.length === 0 ? (
-            <EmptyCart>Your cart is empty</EmptyCart>
+            <EmptyCartContainer>
+              <EmptyCart>Your cart is empty</EmptyCart>
+              <ContinueShoppingLink to="/products">
+                Continue Shopping
+              </ContinueShoppingLink>
+            </EmptyCartContainer>
           ) : (
-            cartItems.map(item => (
-              <CartItem key={item.id} item={item} />
-            ))
+            <>
+              {cartItems.map(item => (
+                <CartItem key={item.id} item={item} />
+              ))}
+              <ContinueShoppingWrapper>
+                <ContinueShoppingLink to="/products">
+                  ← Continue Shopping
+                </ContinueShoppingLink>
+              </ContinueShoppingWrapper>
+            </>
           )}
         </CartItems>
-        <CartSummary>
-          <h2>Order Summary</h2>
-          <SummaryItem>
-            <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
-          </SummaryItem>
-          <SummaryItem>
-            <span>Shipping</span>
-            <span>${shipping.toFixed(2)}</span>
-          </SummaryItem>
-          <Total>
-            <span>Total</span>
-            <span>${total.toFixed(2)}</span>
-          </Total>
-          <CheckoutButton to="/checkout">Proceed to Checkout</CheckoutButton>
-        </CartSummary>
+        {cartItems.length > 0 && (
+          <CartSummary>
+            <h2>Order Summary</h2>
+            <SummaryItem>
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </SummaryItem>
+            <SummaryItem>
+              <span>Shipping</span>
+              <span>${shipping.toFixed(2)}</span>
+            </SummaryItem>
+            <Total>
+              <span>Total</span>
+              <span>${total.toFixed(2)}</span>
+            </Total>
+            <CheckoutButton to="/checkout">Proceed to Checkout</CheckoutButton>
+          </CartSummary>
+        )}
       </CartContent>
     </CartWrapper>
   );
@@ -219,6 +233,32 @@ const QuantityDisplay = styled.span`
   padding: 0.25rem 0.5rem;
   min-width: 2rem;
   text-align: center;
+`;
+
+const EmptyCartContainer = styled.div`
+  text-align: center;
+  padding: 2rem;
+`;
+
+const ContinueShoppingWrapper = styled.div`
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+`;
+
+const ContinueShoppingLink = styled(Link)`
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  color: #4CAF50;
+  text-decoration: none;
+  border: 1px solid #4CAF50;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #4CAF50;
+    color: white;
+  }
 `;
 
 export default Cart;
