@@ -1,5 +1,27 @@
 import { createContext, useContext, useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const slideOut = keyframes`
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+`;
 
 const NotificationContext = createContext();
 
@@ -33,6 +55,11 @@ const NotificationWrapper = styled.div`
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   z-index: 1000;
+  animation: ${slideIn} 0.3s ease forwards;
+  
+  &.closing {
+    animation: ${slideOut} 0.3s ease forwards;
+  }
 `;
 
 export function useNotification() {

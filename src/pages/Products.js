@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import ProductCard from '../components/common/ProductCard';
 import ProductSkeleton from '../components/common/ProductSkeleton';
 import { useProducts } from '../data/products';
+import EmptyState from '../components/common/EmptyState';
 
 const Products = () => {
   const { products, loading } = useProducts();
@@ -19,6 +20,15 @@ const Products = () => {
           products.map(product => (
             <ProductCard key={product.id} {...product} />
           ))
+        )}
+        {!loading && products.length === 0 && (
+          <EmptyState
+            icon="🔍"
+            title="No Products Found"
+            message="We couldn't find any products matching your criteria."
+            actionText="Clear Filters"
+            actionLink="/products"
+          />
         )}
       </ProductGrid>
     </ProductsWrapper>

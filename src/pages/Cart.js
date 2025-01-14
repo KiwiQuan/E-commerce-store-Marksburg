@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import EmptyState from '../components/common/EmptyState';
 
 const Cart = () => {
   const { cartItems, removeFromCart } = useCart();
@@ -15,10 +16,13 @@ const Cart = () => {
         <CartItems>
           {cartItems.length === 0 ? (
             <EmptyCartContainer>
-              <EmptyCart>Your cart is empty</EmptyCart>
-              <ContinueShoppingLink to="/products">
-                Continue Shopping
-              </ContinueShoppingLink>
+              <EmptyState
+                icon="🛒"
+                title="Your Cart is Empty"
+                message="Looks like you haven't added anything to your cart yet."
+                actionText="Start Shopping"
+                actionLink="/products"
+              />
             </EmptyCartContainer>
           ) : (
             <>

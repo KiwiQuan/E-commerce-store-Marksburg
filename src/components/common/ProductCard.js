@@ -1,7 +1,18 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useNotification } from '../../context/NotificationContext';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const ProductCard = ({ id, name, price, image, description }) => {
   const { addToCart } = useCart();
@@ -31,15 +42,16 @@ const ProductCard = ({ id, name, price, image, description }) => {
 };
 
 const Card = styled.div`
-  border: 1px solid #eee;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
-  transition: transform 0.2s;
-  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: ${fadeIn} 0.3s ease forwards;
   
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }
 `;
 

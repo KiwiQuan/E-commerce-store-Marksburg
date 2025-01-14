@@ -42,8 +42,8 @@
 - [x] Mobile responsive menu
 - [x] Loading skeletons
 - [ ] Better error handling
-- [ ] Smooth animations
-- [ ] Empty state designs
+- [x] Smooth animations
+- [x] Empty state designs
 - [ ] Better product image handling
 
 ## Technical Improvements
