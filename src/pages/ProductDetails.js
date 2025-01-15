@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useNotification } from '../context/NotificationContext';
 import { useState } from 'react';
 import { BsStarFill, BsStarHalf, BsStar } from 'react-icons/bs';
+import ProductCard from '../components/common/ProductCard';
 
 const shimmer = keyframes`
   0% {
@@ -42,6 +43,11 @@ const ProductDetails = () => {
     // Same renderStars function as in ProductCard
   };
 
+  // Get related products (same category, excluding current product)
+  const relatedProducts = products
+    .filter(p => p.category === product.category && p.id !== product.id)
+    .slice(0, 4); // Show up to 4 related products
+
   return (
     <Wrapper>
       <ImageSection>
@@ -69,6 +75,21 @@ const ProductDetails = () => {
           Add to Cart
         </AddToCartButton>
       </ContentSection>
+      
+      {/* Add Related Products Section */}
+      <RelatedProductsSection>
+        <h2>Related Products</h2>
+        <RelatedProductsGrid>
+          {relatedProducts.length > 0 ? (
+            relatedProducts.map(relatedProduct => (
+              <ProductCard key={relatedProduct.id} {...relatedProduct} />
+            ))
+          ) : (
+            <EmptyRelated>No related products found</EmptyRelated>
+          )}
+        </RelatedProductsGrid>
+      </RelatedProductsSection>
+
       <ReviewsSection>
         <h2>Reviews</h2>
         <RatingOverview>
@@ -242,6 +263,32 @@ const EmptyReviews = styled.div`
   color: #666;
   background: #f9f9f9;
   border-radius: 8px;
+`;
+
+const RelatedProductsSection = styled.section`
+  grid-column: 1 / -1;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+
+  h2 {
+    margin-bottom: 2rem;
+  }
+`;
+
+const RelatedProductsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+`;
+
+const EmptyRelated = styled.div`
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 8px;
+  grid-column: 1 / -1;
 `;
 
 export default ProductDetails;
