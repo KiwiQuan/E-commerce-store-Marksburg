@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import ProductCard from '../components/common/ProductCard';
 import ProductSkeleton from '../components/common/ProductSkeleton';
 import SearchBar from '../components/common/SearchBar';
+import FilterBar from '../components/common/FilterBar';
 import { useProducts } from '../data/products';
 import EmptyState from '../components/common/EmptyState';
 import { useState, useMemo } from 'react';
@@ -9,39 +10,59 @@ import { useState, useMemo } from 'react';
 const Products = () => {
   const { products, loading } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [sortBy, setSortBy] = useState('name');
 
+  // Define categories based on what's available in the API
+  const categories = ['electronics', 'jewelery', "men's clothing", "women's clothing"];
+
+  // Filter and sort products
   const filteredProducts = useMemo(() => {
-    if (!searchTerm) return products;
-    
-    return products.filter(product => {
-      const searchFields = [
-        product.name,
-        product.description,
-        product.category,
-      ].map(field => field?.toLowerCase() || '');
+    return products
+      .filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = !selectedCategory || product.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case 'price-asc':
+            return a.price - b.price;
+          case 'price-desc':
+            return b.price - a.price;
+          case 'popularity':
+            return b.rating - a.rating;
+          default:
+            return a.name.localeCompare(b.name);
+        }
+      });
+  }, [products, searchTerm, selectedCategory, sortBy]);
 
-      return searchFields.some(field => 
-        field.includes(searchTerm.toLowerCase())
-      );
-    });
-  }, [products, searchTerm]);
-
-  const handleClearSearch = () => {
+  const handleClearFilters = () => {
     setSearchTerm('');
+    setSelectedCategory('');
+    setSortBy('name');
   };
 
   return (
     <ProductsWrapper>
       <h1>Our Products</h1>
       <SearchBar onSearch={setSearchTerm} value={searchTerm} />
+      <FilterBar
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onCategoryChange={setSelectedCategory}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
+      />
       
       {!loading && filteredProducts.length === 0 && (
         <EmptyState
           icon="🔍"
           title="No Products Found"
-          message="We couldn't find any products matching your search."
-          actionText="Clear Search"
-          onAction={handleClearSearch}
+          message="Try adjusting your filters or search terms."
+          actionText="Clear Filters"
+          onAction={handleClearFilters}
         />
       )}
 
