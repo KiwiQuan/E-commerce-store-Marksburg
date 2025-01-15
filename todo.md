@@ -2,7 +2,7 @@
 
 ## Product Features
 - [x] Search functionality
-- [ ] Product categories/filtering
+- [x] Product categories/filtering
 - [ ] Sort by price/name/popularity
 - [ ] Product ratings and reviews
 - [ ] Related products section
