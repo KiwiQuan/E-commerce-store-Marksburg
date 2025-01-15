@@ -1,7 +1,7 @@
 # Kiwiverse E-commerce Features Todo List
 
 ## Product Features
-- [ ] Search functionality
+- [x] Search functionality
 - [ ] Product categories/filtering
 - [ ] Sort by price/name/popularity
 - [ ] Product ratings and reviews

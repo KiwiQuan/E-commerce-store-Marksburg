@@ -1,5 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-import { Link } from 'react-router-dom';
 
 const fadeIn = keyframes`
   from {
@@ -16,7 +15,7 @@ const EmptyState = ({
   title, 
   message, 
   actionText, 
-  actionLink, 
+  onAction, 
   icon = "🛍️" 
 }) => {
   return (
@@ -24,8 +23,8 @@ const EmptyState = ({
       <IconWrapper>{icon}</IconWrapper>
       <Title>{title}</Title>
       <Message>{message}</Message>
-      {actionText && actionLink && (
-        <ActionButton to={actionLink}>
+      {actionText && onAction && (
+        <ActionButton onClick={onAction}>
           {actionText}
         </ActionButton>
       )}
@@ -60,12 +59,13 @@ const Message = styled.p`
   margin-bottom: 1.5rem;
 `;
 
-const ActionButton = styled(Link)`
+const ActionButton = styled.button`
   padding: 0.75rem 1.5rem;
   background: #4CAF50;
   color: white;
-  text-decoration: none;
+  border: none;
   border-radius: 4px;
+  cursor: pointer;
   transition: background 0.2s ease;
   
   &:hover {

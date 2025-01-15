@@ -1,34 +1,59 @@
 import styled from 'styled-components';
 import ProductCard from '../components/common/ProductCard';
 import ProductSkeleton from '../components/common/ProductSkeleton';
+import SearchBar from '../components/common/SearchBar';
 import { useProducts } from '../data/products';
 import EmptyState from '../components/common/EmptyState';
+import { useState, useMemo } from 'react';
 
 const Products = () => {
   const { products, loading } = useProducts();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredProducts = useMemo(() => {
+    if (!searchTerm) return products;
+    
+    return products.filter(product => {
+      const searchFields = [
+        product.name,
+        product.description,
+        product.category,
+      ].map(field => field?.toLowerCase() || '');
+
+      return searchFields.some(field => 
+        field.includes(searchTerm.toLowerCase())
+      );
+    });
+  }, [products, searchTerm]);
+
+  const handleClearSearch = () => {
+    setSearchTerm('');
+  };
 
   return (
     <ProductsWrapper>
       <h1>Our Products</h1>
+      <SearchBar onSearch={setSearchTerm} value={searchTerm} />
+      
+      {!loading && filteredProducts.length === 0 && (
+        <EmptyState
+          icon="🔍"
+          title="No Products Found"
+          message="We couldn't find any products matching your search."
+          actionText="Clear Search"
+          onAction={handleClearSearch}
+        />
+      )}
+
       <ProductGrid>
         {loading ? (
-          // Show 8 skeleton cards while loading
           [...Array(8)].map((_, index) => (
             <ProductSkeleton key={index} />
           ))
         ) : (
-          products.map(product => (
+          filteredProducts.map(product => (
             <ProductCard key={product.id} {...product} />
           ))
-        )}
-        {!loading && products.length === 0 && (
-          <EmptyState
-            icon="🔍"
-            title="No Products Found"
-            message="We couldn't find any products matching your criteria."
-            actionText="Clear Filters"
-            actionLink="/products"
-          />
         )}
       </ProductGrid>
     </ProductsWrapper>
