@@ -30,8 +30,15 @@ const Products = () => {
             return a.price - b.price;
           case 'price-desc':
             return b.price - a.price;
-          case 'popularity':
-            return b.rating - a.rating;
+          case 'rating-desc':
+            const ratingA = parseFloat(a.rating) || 0;
+            const ratingB = parseFloat(b.rating) || 0;
+            return ratingB - ratingA;
+          case 'rating-asc':
+            const ratingAsc_A = parseFloat(a.rating) || 0;
+            const ratingAsc_B = parseFloat(b.rating) || 0;
+            return ratingAsc_A - ratingAsc_B;
+          case 'name':
           default:
             return a.name.localeCompare(b.name);
         }

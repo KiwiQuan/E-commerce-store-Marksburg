@@ -41,7 +41,8 @@ const FilterBar = ({
           <option value="name">Name</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
-          <option value="popularity">Popularity</option>
+          <option value="rating-desc">Rating: High to Low</option>
+          <option value="rating-asc">Rating: Low to High</option>
         </Select>
       </SortWrapper>
     </FilterWrapper>

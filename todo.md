@@ -3,8 +3,8 @@
 ## Product Features
 - [x] Search functionality
 - [x] Product categories/filtering
-- [ ] Sort by price/name/popularity
-- [ ] Product ratings and reviews
+- [x] Sort by price/name/popularity
+- [x] Product ratings and reviews
 - [ ] Related products section
 - [ ] Product image gallery/zoom
 - [ ] Product variants (size, color, etc.)

@@ -4,6 +4,7 @@ import { useProducts } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useNotification } from '../context/NotificationContext';
 import { useState } from 'react';
+import { BsStarFill, BsStarHalf, BsStar } from 'react-icons/bs';
 
 const shimmer = keyframes`
   0% {
@@ -37,6 +38,10 @@ const ProductDetails = () => {
     showNotification(`${product.name} added to cart!`);
   };
 
+  const renderStars = (rating) => {
+    // Same renderStars function as in ProductCard
+  };
+
   return (
     <Wrapper>
       <ImageSection>
@@ -64,6 +69,22 @@ const ProductDetails = () => {
           Add to Cart
         </AddToCartButton>
       </ContentSection>
+      <ReviewsSection>
+        <h2>Reviews</h2>
+        <RatingOverview>
+          <AverageRating>
+            <h3>{product.rating}</h3>
+            <RatingStars>{renderStars(product.rating)}</RatingStars>
+            <RatingCount>Based on customer reviews</RatingCount>
+          </AverageRating>
+        </RatingOverview>
+        {/* Placeholder for future customer reviews */}
+        <ReviewsList>
+          <EmptyReviews>
+            Be the first to review this product!
+          </EmptyReviews>
+        </ReviewsList>
+      </ReviewsSection>
     </Wrapper>
   );
 };
@@ -173,6 +194,54 @@ const FallbackImage = styled.div`
   small {
     font-size: 1rem;
   }
+`;
+
+const ReviewsSection = styled.section`
+  grid-column: 1 / -1;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+`;
+
+const RatingOverview = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+`;
+
+const AverageRating = styled.div`
+  text-align: center;
+  
+  h3 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #333;
+  }
+`;
+
+const RatingStars = styled.div`
+  display: flex;
+  gap: 0.25rem;
+  color: #ffc107;
+  margin: 0.5rem 0;
+`;
+
+const RatingCount = styled.div`
+  color: #666;
+  font-size: 0.9rem;
+`;
+
+const ReviewsList = styled.div`
+  margin-top: 2rem;
+`;
+
+const EmptyReviews = styled.div`
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 8px;
 `;
 
 export default ProductDetails;

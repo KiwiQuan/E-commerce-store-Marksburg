@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useState } from 'react';
+import { BsStarFill, BsStarHalf, BsStar } from 'react-icons/bs';
 
 const fadeIn = keyframes`
   from {
@@ -24,13 +25,14 @@ const shimmer = keyframes`
   }
 `;
 
-const ProductCard = ({ id, name, price, image, description }) => {
+const ProductCard = ({ id, name, price, image, rating }) => {
   const { addToCart } = useCart();
   const { showNotification } = useNotification();
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.preventDefault();
     addToCart({ id, name, price, image });
     showNotification(`${name} added to cart!`);
   };
@@ -41,6 +43,30 @@ const ProductCard = ({ id, name, price, image, description }) => {
 
   const handleImageLoad = () => {
     setImageLoaded(true);
+  };
+
+  // Function to render stars based on rating
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<BsStarFill key={`full-${i}`} />);
+    }
+    
+    // Add half star if needed
+    if (hasHalfStar) {
+      stars.push(<BsStarHalf key="half" />);
+    }
+    
+    // Add empty stars
+    while (stars.length < 5) {
+      stars.push(<BsStar key={`empty-${stars.length}`} />);
+    }
+
+    return stars;
   };
 
   return (
@@ -64,7 +90,10 @@ const ProductCard = ({ id, name, price, image, description }) => {
       </ImageWrapper>
       <Content>
         <Title>{name}</Title>
-        <Description>{description}</Description>
+        <RatingWrapper>
+          {renderStars(rating)}
+          <RatingText>({rating})</RatingText>
+        </RatingWrapper>
         <Price>${price}</Price>
         <Actions>
           <ViewButton to={`/product/${id}`}>View Details</ViewButton>
@@ -196,6 +225,20 @@ const FallbackImage = styled.div`
   small {
     font-size: 0.8rem;
   }
+`;
+
+const RatingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+  color: #ffc107; /* Star color */
+`;
+
+const RatingText = styled.span`
+  color: #666;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
 `;
 
 export default ProductCard;
