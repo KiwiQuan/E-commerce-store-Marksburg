@@ -7,7 +7,7 @@
 - [x] Product ratings and reviews
 - [x] Related products section
 - [x] Product image gallery/zoom
-- [ ] Product variants (size, color, etc.)
+- [x] Product variants (size, color, etc.)
 
 ## Cart Enhancements
 - [x] Cart item quantity adjustment

@@ -4,14 +4,31 @@ import { useCart } from '../context/CartContext';
 import EmptyState from '../components/common/EmptyState';
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, emptyCart } = useCart();
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = 0; // You can modify this based on your needs
   const total = subtotal + shipping;
 
+  const handleRemove = (item) => {
+    removeFromCart(item.id, item.variants);
+  };
+
+  const handleQuantityChange = (item, newQuantity) => {
+    if (newQuantity > 0) {
+      updateQuantity(item.id, newQuantity, item.variants);
+    }
+  };
+
   return (
     <CartWrapper>
-      <h1>Your Cart</h1>
+      <CartHeader>
+        <h1>Your Cart</h1>
+        {cartItems.length > 0 && (
+          <EmptyCartButton onClick={emptyCart}>
+            Empty Cart
+          </EmptyCartButton>
+        )}
+      </CartHeader>
       <CartContent>
         <CartItems>
           {cartItems.length === 0 ? (
@@ -129,30 +146,43 @@ const CartItem = ({ item }) => {
 
   if (!item) return null;
 
+  // Create itemKey for this cart item
+  const itemKey = item.variants 
+    ? `${item.id}-${item.variants.size || ''}-${item.variants.color || ''}`
+    : `${item.id}`;
+
   return (
     <CartItemWrapper>
       <ItemImage>
         <img src={item.image} alt={item.name} />
       </ItemImage>
       <ItemInfo>
-        <ItemName>{item.name}</ItemName>
+        <ItemName>
+          {item.name}
+          {item.variants && (
+            <ItemVariants>
+              {item.variants.size && <span>Size: {item.variants.size}</span>}
+              {item.variants.color && <span>Color: {item.variants.color}</span>}
+            </ItemVariants>
+          )}
+        </ItemName>
         <ItemPrice>${(item.price * item.quantity).toFixed(2)}</ItemPrice>
         <QuantityControls>
           <QuantityButton 
-            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+            onClick={() => updateQuantity(itemKey, item.quantity - 1)}
             disabled={item.quantity <= 1}
           >
             -
           </QuantityButton>
           <QuantityDisplay>{item.quantity}</QuantityDisplay>
           <QuantityButton 
-            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+            onClick={() => updateQuantity(itemKey, item.quantity + 1)}
           >
             +
           </QuantityButton>
         </QuantityControls>
       </ItemInfo>
-      <RemoveButton onClick={() => removeFromCart(item.id)}>
+      <RemoveButton onClick={() => removeFromCart(itemKey)}>
         Remove
       </RemoveButton>
     </CartItemWrapper>
@@ -262,6 +292,42 @@ const ContinueShoppingLink = styled(Link)`
   &:hover {
     background: #4CAF50;
     color: white;
+  }
+`;
+
+const CartHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
+
+const EmptyCartButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+  
+  &:hover {
+    background: #cc0000;
+  }
+`;
+
+const ItemVariants = styled.div`
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+  
+  span {
+    margin-right: 1rem;
+    
+    &:last-child {
+      margin-right: 0;
+    }
   }
 `;
 

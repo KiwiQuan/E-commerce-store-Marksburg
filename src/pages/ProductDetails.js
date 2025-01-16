@@ -25,7 +25,24 @@ const ProductDetails = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef(null);
-  
+  const [selectedVariants, setSelectedVariants] = useState({
+    size: '',
+    color: ''
+  });
+
+  // Add example variants (in a real app, these would come from your API)
+  const variants = {
+    size: ['Small', 'Medium', 'Large', 'XL'],
+    color: ['Black', 'White', 'Blue', 'Red']
+  };
+
+  const handleVariantChange = (type, value) => {
+    setSelectedVariants(prev => ({
+      ...prev,
+      [type]: value
+    }));
+  };
+
   if (loading) {
     return <LoadingWrapper>Loading product details...</LoadingWrapper>;
   }
@@ -37,7 +54,17 @@ const ProductDetails = () => {
   }
 
   const handleAddToCart = () => {
-    addToCart(product);
+    // Ensure we pass the same product structure as ProductCard
+    const productToAdd = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      variants: selectedVariants, // Include selected variants if needed
+      quantity: 1 // Set initial quantity
+    };
+    
+    addToCart(productToAdd);
     showNotification(`${product.name} added to cart!`);
   };
 
@@ -96,6 +123,42 @@ const ProductDetails = () => {
         <h1>{product.name}</h1>
         <Price>${product.price}</Price>
         <Description>{product.description}</Description>
+        
+        {/* Add Variants Selection */}
+        <VariantsSection>
+          {variants.size.length > 0 && (
+            <VariantGroup>
+              <Label>Size:</Label>
+              <Select
+                value={selectedVariants.size}
+                onChange={(e) => handleVariantChange('size', e.target.value)}
+              >
+                <option value="">Select Size</option>
+                {variants.size.map(size => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </Select>
+            </VariantGroup>
+          )}
+          
+          {variants.color.length > 0 && (
+            <VariantGroup>
+              <Label>Color:</Label>
+              <ColorOptions>
+                {variants.color.map(color => (
+                  <ColorButton
+                    key={color}
+                    color={color.toLowerCase()}
+                    selected={selectedVariants.color === color}
+                    onClick={() => handleVariantChange('color', color)}
+                    aria-label={`Select ${color} color`}
+                  />
+                ))}
+              </ColorOptions>
+            </VariantGroup>
+          )}
+        </VariantsSection>
+
         <AddToCartButton onClick={handleAddToCart}>
           Add to Cart
         </AddToCartButton>
@@ -348,6 +411,61 @@ const ZoomedImage = styled.div`
 
   ${ZoomWrapper}:hover & {
     opacity: 1;
+  }
+`;
+
+const VariantsSection = styled.div`
+  margin: 1.5rem 0;
+`;
+
+const VariantGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #4CAF50;
+  }
+`;
+
+const ColorOptions = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+`;
+
+const ColorButton = styled.button`
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid ${props => props.selected ? '#4CAF50' : '#ddd'};
+  background-color: ${props => props.color};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4CAF50;
   }
 `;
 
