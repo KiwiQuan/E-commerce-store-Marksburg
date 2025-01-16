@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <HeaderWrapper>
-      <Logo to="/" onClick={closeMobileMenu}>Kiwiverse</Logo>
+      <Logo to="/" onClick={closeMobileMenu}>Marksburg</Logo>
       
       <MobileMenuButton onClick={toggleMobileMenu}>
         {isMobileMenuOpen ? <HiX size={24} /> : <HiMenu size={24} />}

@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <HomeWrapper>
       <Hero>
-        <h1>Welcome to Kiwiverse</h1>
+        <h1>Welcome to Marksburg</h1>
         <p>Your one-stop shop for everything</p>
       </Hero>
       <FeaturedSection>

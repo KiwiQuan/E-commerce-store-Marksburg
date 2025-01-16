@@ -5,7 +5,7 @@ const Footer = () => {
     <FooterWrapper>
       <FooterContent>
         <div>
-          <h3>Kiwiverse</h3>
+          <h3>Marksburg</h3>
           <p>Your one-stop shop for everything</p>
         </div>
         <FooterLinks>
@@ -29,7 +29,7 @@ const Footer = () => {
         </FooterLinks>
       </FooterContent>
       <Copyright>
-        © {new Date().getFullYear()} Kiwiverse. All rights reserved.
+        © {new Date().getFullYear()} Marksburg. All rights reserved.
       </Copyright>
     </FooterWrapper>
   );

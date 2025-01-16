@@ -1,4 +1,4 @@
-# Kiwiverse E-commerce Features Todo List
+# Marksburg E-commerce Features Todo List
 
 ## Product Features
 - [x] Search functionality
