@@ -6,7 +6,7 @@
 - [x] Sort by price/name/popularity
 - [x] Product ratings and reviews
 - [x] Related products section
-- [ ] Product image gallery/zoom
+- [x] Product image gallery/zoom
 - [ ] Product variants (size, color, etc.)
 
 ## Cart Enhancements

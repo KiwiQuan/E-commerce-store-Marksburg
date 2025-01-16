@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { useProducts } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useNotification } from '../context/NotificationContext';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { BsStarFill, BsStarHalf, BsStar } from 'react-icons/bs';
 import ProductCard from '../components/common/ProductCard';
 
@@ -23,6 +23,8 @@ const ProductDetails = () => {
   const { showNotification } = useNotification();
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const imageRef = useRef(null);
   
   if (loading) {
     return <LoadingWrapper>Loading product details...</LoadingWrapper>;
@@ -48,6 +50,16 @@ const ProductDetails = () => {
     .filter(p => p.category === product.category && p.id !== product.id)
     .slice(0, 4); // Show up to 4 related products
 
+  const handleMouseMove = (e) => {
+    if (!imageRef.current) return;
+
+    const { left, top, width, height } = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+
+    setZoomPosition({ x, y });
+  };
+
   return (
     <Wrapper>
       <ImageSection>
@@ -58,13 +70,26 @@ const ProductDetails = () => {
             <small>Image not available</small>
           </FallbackImage>
         ) : (
-          <ProductImage
-            src={product.image}
-            alt={product.name}
-            onError={() => setImageError(true)}
-            onLoad={() => setImageLoaded(true)}
-            style={{ opacity: imageLoaded ? 1 : 0 }}
-          />
+          <ZoomWrapper>
+            <ProductImage
+              ref={imageRef}
+              src={product.image}
+              alt={product.name}
+              onError={() => setImageError(true)}
+              onLoad={() => setImageLoaded(true)}
+              style={{ opacity: imageLoaded ? 1 : 0 }}
+            />
+            <ZoomLens
+              onMouseMove={handleMouseMove}
+              onMouseLeave={() => setZoomPosition({ x: 0, y: 0 })}
+            />
+            <ZoomedImage
+              style={{
+                backgroundImage: `url(${product.image})`,
+                backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`
+              }}
+            />
+          </ZoomWrapper>
         )}
       </ImageSection>
       <ContentSection>
@@ -289,6 +314,41 @@ const EmptyRelated = styled.div`
   background: #f9f9f9;
   border-radius: 8px;
   grid-column: 1 / -1;
+`;
+
+const ZoomWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  cursor: zoom-in;
+`;
+
+const ZoomLens = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+`;
+
+const ZoomedImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: 200%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  margin-left: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  ${ZoomWrapper}:hover & {
+    opacity: 1;
+  }
 `;
 
 export default ProductDetails;
