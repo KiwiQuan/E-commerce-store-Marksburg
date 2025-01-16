@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useState } from 'react';
 import { BsStarFill, BsStarHalf, BsStar } from 'react-icons/bs';
+import QuickView from './QuickView';
 
 const fadeIn = keyframes`
   from {
@@ -25,12 +26,15 @@ const shimmer = keyframes`
   }
 `;
 
-const ProductCard = ({ id, name, price, image, rating }) => {
+const ProductCard = ({ id, name, price, image, rating, description, category }) => {
   const { addToCart } = useCart();
   const { showNotification } = useNotification();
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [showQuickView, setShowQuickView] = useState(false);
   
+  const product = { id, name, price, image, rating, description, category };
+
   const handleAddToCart = (e) => {
     e.preventDefault();
     addToCart({ id, name, price, image });
@@ -70,37 +74,55 @@ const ProductCard = ({ id, name, price, image, rating }) => {
   };
 
   return (
-    <Card>
-      <ImageWrapper>
-        {!imageLoaded && !imageError && <ImagePlaceholder />}
-        {imageError ? (
-          <FallbackImage>
-            <span>🖼️</span>
-            <small>Image not available</small>
-          </FallbackImage>
-        ) : (
-          <ProductImage
-            src={image}
-            alt={name}
-            onError={handleImageError}
-            onLoad={handleImageLoad}
-            style={{ opacity: imageLoaded ? 1 : 0 }}
-          />
-        )}
-      </ImageWrapper>
-      <Content>
-        <Title>{name}</Title>
-        <RatingWrapper>
-          {renderStars(rating)}
-          <RatingText>({rating})</RatingText>
-        </RatingWrapper>
-        <Price>${price}</Price>
-        <Actions>
-          <ViewButton to={`/product/${id}`}>View Details</ViewButton>
-          <AddButton onClick={handleAddToCart}>Add to Cart</AddButton>
-        </Actions>
-      </Content>
-    </Card>
+    <CardWrapper>
+      <Card>
+        <ImageWrapper>
+          {!imageLoaded && !imageError && <ImagePlaceholder />}
+          {imageError ? (
+            <FallbackImage>
+              <span>🖼️</span>
+              <small>Image not available</small>
+            </FallbackImage>
+          ) : (
+            <ProductImage
+              src={image}
+              alt={name}
+              onError={handleImageError}
+              onLoad={handleImageLoad}
+              style={{ opacity: imageLoaded ? 1 : 0 }}
+            />
+          )}
+        </ImageWrapper>
+        <Content>
+          <Title>{name}</Title>
+          <RatingWrapper>
+            {renderStars(rating)}
+            <RatingText>({rating})</RatingText>
+          </RatingWrapper>
+          <Price>${price}</Price>
+          <Actions>
+            <ViewButton to={`/product/${id}`}>View Details</ViewButton>
+            <AddButton onClick={handleAddToCart}>Add to Cart</AddButton>
+          </Actions>
+        </Content>
+      </Card>
+
+      <QuickViewButton 
+        onClick={(e) => {
+          e.preventDefault();
+          setShowQuickView(true);
+        }}
+      >
+        Quick View
+      </QuickViewButton>
+
+      {showQuickView && (
+        <QuickView 
+          product={product} 
+          onClose={() => setShowQuickView(false)} 
+        />
+      )}
+    </CardWrapper>
   );
 };
 
@@ -110,7 +132,8 @@ const Card = styled.div`
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  animation: ${fadeIn} 0.3s ease forwards;
+  position: relative;
+  z-index: 2;
   
   &:hover {
     transform: translateY(-4px);
@@ -239,6 +262,53 @@ const RatingText = styled.span`
   color: #666;
   margin-left: 0.5rem;
   font-size: 0.9rem;
+`;
+
+const QuickViewButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  
+  &:hover {
+    background: rgba(76, 175, 80, 1);
+    transform: scale(1.05);
+  }
+`;
+
+const CardWrapper = styled.div`
+  position: relative;
+  
+  &:hover {
+    ${Card} {
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        pointer-events: none;
+        z-index: 1;
+      }
+    }
+    
+    ${QuickViewButton} {
+      opacity: 1;
+    }
+  }
 `;
 
 export default ProductCard;

@@ -24,7 +24,7 @@
 - [ ] Save addresses for faster checkout
 
 ## Shopping Experience
-- [ ] Product quick view
+- [x] Product quick view
 - [ ] Recently viewed products
 - [ ] "Back to top" button
 - [ ] Breadcrumb navigation
