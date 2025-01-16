@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import EmptyState from '../components/common/EmptyState';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, emptyCart } = useCart();
+  const navigate = useNavigate();
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const shipping = 0; // You can modify this based on your needs
   const total = subtotal + shipping;
@@ -38,7 +39,7 @@ const Cart = () => {
                 title="Your Cart is Empty"
                 message="Looks like you haven't added anything to your cart yet."
                 actionText="Start Shopping"
-                actionLink="/products"
+                onAction={() => navigate('/products')}
               />
             </EmptyCartContainer>
           ) : (

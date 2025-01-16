@@ -30,16 +30,23 @@ const ProductDetails = () => {
     color: ''
   });
 
-  // Add example variants (in a real app, these would come from your API)
+  // First, define example variants if they don't exist in the product data
   const variants = {
-    size: ['Small', 'Medium', 'Large', 'XL'],
-    color: ['Black', 'White', 'Blue', 'Red']
+    sizes: ['Small', 'Medium', 'Large', 'XL'],
+    colors: ['Black', 'White', 'Blue', 'Red']
   };
 
   const handleVariantChange = (type, value) => {
     setSelectedVariants(prev => ({
       ...prev,
       [type]: value
+    }));
+  };
+
+  const handleVariantSelect = (type, value) => {
+    setSelectedVariants(prev => ({
+      ...prev,
+      [type]: value === prev[type] ? null : value // Toggle variant if clicking the same value
     }));
   };
 
@@ -125,39 +132,51 @@ const ProductDetails = () => {
         <Description>{product.description}</Description>
         
         {/* Add Variants Selection */}
-        <VariantsSection>
-          {variants.size.length > 0 && (
-            <VariantGroup>
-              <Label>Size:</Label>
-              <Select
-                value={selectedVariants.size}
-                onChange={(e) => handleVariantChange('size', e.target.value)}
-              >
-                <option value="">Select Size</option>
-                {variants.size.map(size => (
-                  <option key={size} value={size}>{size}</option>
-                ))}
-              </Select>
-            </VariantGroup>
-          )}
-          
-          {variants.color.length > 0 && (
-            <VariantGroup>
-              <Label>Color:</Label>
-              <ColorOptions>
-                {variants.color.map(color => (
-                  <ColorButton
-                    key={color}
-                    color={color.toLowerCase()}
-                    selected={selectedVariants.color === color}
-                    onClick={() => handleVariantChange('color', color)}
-                    aria-label={`Select ${color} color`}
-                  />
-                ))}
-              </ColorOptions>
-            </VariantGroup>
-          )}
-        </VariantsSection>
+        <VariantsWrapper>
+          <VariantGroup>
+            <VariantLabel>Size:</VariantLabel>
+            <VariantOptions>
+              {variants.sizes.map(size => (
+                <VariantButton
+                  key={size}
+                  selected={selectedVariants.size === size}
+                  onClick={() => handleVariantSelect('size', size)}
+                >
+                  {size}
+                </VariantButton>
+              ))}
+              {selectedVariants.size && (
+                <ClearVariantButton 
+                  onClick={() => setSelectedVariants(prev => ({ ...prev, size: null }))}
+                >
+                  ✕
+                </ClearVariantButton>
+              )}
+            </VariantOptions>
+          </VariantGroup>
+
+          <VariantGroup>
+            <VariantLabel>Color:</VariantLabel>
+            <VariantOptions>
+              {variants.colors.map(color => (
+                <VariantButton
+                  key={color}
+                  selected={selectedVariants.color === color}
+                  onClick={() => handleVariantSelect('color', color)}
+                >
+                  {color}
+                </VariantButton>
+              ))}
+              {selectedVariants.color && (
+                <ClearVariantButton 
+                  onClick={() => setSelectedVariants(prev => ({ ...prev, color: null }))}
+                >
+                  ✕
+                </ClearVariantButton>
+              )}
+            </VariantOptions>
+          </VariantGroup>
+        </VariantsWrapper>
 
         <AddToCartButton onClick={handleAddToCart}>
           Add to Cart
@@ -422,51 +441,51 @@ const VariantGroup = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const Label = styled.label`
-  display: block;
+const VariantLabel = styled.div`
+  font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 500;
 `;
 
-const Select = styled.select`
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
+const VariantButton = styled.button`
+  padding: 0.5rem 1rem;
+  border: 1px solid ${props => props.selected ? '#4CAF50' : '#ddd'};
+  background: ${props => props.selected ? '#4CAF50' : 'white'};
+  color: ${props => props.selected ? 'white' : '#333'};
   border-radius: 4px;
-  background-color: white;
   cursor: pointer;
+  transition: all 0.2s ease;
 
-  &:focus {
-    outline: none;
+  &:hover {
     border-color: #4CAF50;
   }
 `;
 
-const ColorOptions = styled.div`
+const VariantOptions = styled.div`
   display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 `;
 
-const ColorButton = styled.button`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  border: 2px solid ${props => props.selected ? '#4CAF50' : '#ddd'};
-  background-color: ${props => props.color};
+const ClearVariantButton = styled.button`
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  color: #666;
   cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
-
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+  
   &:hover {
-    transform: scale(1.1);
+    color: #ff4444;
   }
+`;
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #4CAF50;
-  }
+const VariantsWrapper = styled.div`
+  margin: 2rem 0;
 `;
 
 export default ProductDetails;
