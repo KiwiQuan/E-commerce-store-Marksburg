@@ -58,6 +58,10 @@ const CheckoutContent = styled.div`
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
   margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const Form = styled.form`
@@ -65,6 +69,10 @@ const Form = styled.form`
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 const FormGroup = styled.div`

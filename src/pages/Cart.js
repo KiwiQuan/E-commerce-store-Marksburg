@@ -89,6 +89,10 @@ const CartContent = styled.div`
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
   margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const CartItems = styled.div`
@@ -192,12 +196,13 @@ const CartItem = ({ item }) => {
 
 const CartItemWrapper = styled.div`
   display: flex;
-  align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid #eee;
+  gap: 1rem;
+  margin-bottom: 1rem;
   
-  &:last-child {
-    border-bottom: none;
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 `;
 

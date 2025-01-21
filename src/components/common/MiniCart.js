@@ -71,6 +71,16 @@ const MiniCartWrapper = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   margin-top: 0.5rem;
+
+  @media (max-width: 480px) {
+    width: 100%;
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    border-radius: 8px 8px 0 0;
+  }
 `;
 
 const CartHeader = styled.div`
