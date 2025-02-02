@@ -84,7 +84,10 @@ const Products = () => {
           ))
         )}
       </ProductGrid>
+
+      
     </ProductsWrapper>
+    
   );
 };
 
@@ -99,6 +102,7 @@ const ProductsWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
 `;
 
 const ProductGrid = styled.div`
