@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/E-commerce-store-Marksburg/static/css/main.74ef83d0.css",
-    "main.js": "/E-commerce-store-Marksburg/static/js/main.bcd1cb64.js",
+    "main.js": "/E-commerce-store-Marksburg/static/js/main.0708d47f.js",
     "static/js/488.891de03a.chunk.js": "/E-commerce-store-Marksburg/static/js/488.891de03a.chunk.js",
     "index.html": "/E-commerce-store-Marksburg/index.html",
     "main.74ef83d0.css.map": "/E-commerce-store-Marksburg/static/css/main.74ef83d0.css.map",
-    "main.bcd1cb64.js.map": "/E-commerce-store-Marksburg/static/js/main.bcd1cb64.js.map",
+    "main.0708d47f.js.map": "/E-commerce-store-Marksburg/static/js/main.0708d47f.js.map",
     "488.891de03a.chunk.js.map": "/E-commerce-store-Marksburg/static/js/488.891de03a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.74ef83d0.css",
-    "static/js/main.bcd1cb64.js"
+    "static/js/main.0708d47f.js"
   ]
 }
